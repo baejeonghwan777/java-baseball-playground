@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class StringTest {
     @Test
@@ -15,7 +16,7 @@ public class StringTest {
     @Test
     void seperate() {
         String[] number = "1,2".split(",");
-        assertThat(number).contains("1","2");
+        assertThat(number).contains("1", "2");
     }
 
     @Test
@@ -26,20 +27,28 @@ public class StringTest {
 
     @Test
     void remove() {
-        String number = "(1,2)".substring(1,4);
+        String number = "(1,2)".substring(1, 4);
         assertThat(number).isEqualTo("1,2");
     }
 
     @Test
-    @DisplayName("문자열 추출 테스트")
-    void extract() {
-        int num = 2;
+    @DisplayName("문자열에서 원하는 하나의 문자를 추출해낸다. 정상적으로 추출이 성공하였는지 비교한다.")
+    void extractNormal() {
+        int index = 2;
+        String value = "abc";
+        char actual = value.charAt(index);
+        assertThat(actual).isEqualTo('c');
+    }
+
+    @Test
+    @DisplayName("문자열에서 원하는 하나의 문자를 추출해낸다. 정상적으로 추출이 성공하지 못해 예외를 발생시킨다.")
+    void extractOdd() {
+        int index = 3;
         String str = "abc";
-        if(num < 0 || num >= str.length()) {
-            throw new IndexOutOfBoundsException();
-        } else if(num >= 0 && num < str.length()) {
-            char actual = str.charAt(num);
-        }
+        assertThatThrownBy(() -> {
+            str.charAt(index);
+        }).isInstanceOf(StringIndexOutOfBoundsException.class)
+                .hasMessageContaining("String index out of range: " + index); // 수정된 부분
     }
 
 }
