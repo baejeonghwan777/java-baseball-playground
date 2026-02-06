@@ -1,12 +1,13 @@
 package study;
 
 public class CalculatorTDDVer {
+    final static int FIRST_NUM = 0;
 
-    public String[] split(String s) {
-        if (s == null) {
+    public String[] split(String string) {
+        if (string == null) {
             return new String[]{};
         }
-        return s.split(" ");
+        return string.split(" ");
     }
 
     public Integer toInt(String value) {
@@ -57,7 +58,7 @@ public class CalculatorTDDVer {
     }
 
     public Integer selectCal(String[] values) {
-        Integer result = toInt(values[0]); // 첫번째 값 초기화
+        Integer result = toInt(values[FIRST_NUM]); // 첫번째 값 초기화
 
         for (int i = 2; i < values.length; i += 2) {
             Integer cal = toInt(values[i]);

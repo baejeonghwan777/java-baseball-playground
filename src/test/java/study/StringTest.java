@@ -34,21 +34,24 @@ public class StringTest {
     @Test
     @DisplayName("문자열에서 원하는 하나의 문자를 추출해낸다. 정상적으로 추출이 성공하였는지 비교한다.")
     void extractNormal() {
-        int index = 2;
+        int index = 2; // give
         String value = "abc";
-        char actual = value.charAt(index);
-        assertThat(actual).isEqualTo('c');
+
+        char actual = value.charAt(index); // when
+
+        assertThat(actual).isEqualTo('c'); // then
     }
 
     @Test
     @DisplayName("문자열에서 원하는 하나의 문자를 추출해낸다. 정상적으로 추출이 성공하지 못해 예외를 발생시킨다.")
     void extractOdd() {
-        int index = 3;
+        int index = 3; // give
         String str = "abc";
+
         assertThatThrownBy(() -> {
-            str.charAt(index);
-        }).isInstanceOf(StringIndexOutOfBoundsException.class)
-                .hasMessageContaining("String index out of range: " + index); // 수정된 부분
+            str.charAt(index); // when
+        }).isInstanceOf(StringIndexOutOfBoundsException.class) // then
+                .hasMessageContaining("String index out of range: " + index);
     }
 
 }
