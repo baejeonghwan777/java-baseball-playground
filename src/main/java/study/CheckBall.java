@@ -1,45 +1,69 @@
 package study;
 
 public class CheckBall {
-    int score = 0;
-    static int MAX_SCORE = 3;
-    static int MAX_NUMBER = 3;
+    static int score = 0;
+    final static int MAX_SCORE = 3;
+    final static int MAX_NUMBER = 3;
+    final static int INIT_NUMBER = 0;
+    final static int BALL = 0;
+    final static int STRIKE = 1;
+    static boolean initalizer = true;
 
-    public int checkScore(int[] inputs, int[] outputs) {
-        int ball = 0;
-        int strike = 0;
+    public int checkScore(int[] inputs, int[] outputs, int[] info) {
         for(int i = 0; i < MAX_NUMBER; i++) {
-            for(int j = 0; j < MAX_NUMBER; j++) { // 분리 예정
-                int[] info = {0, 0}; // output parameter를 받아 ball, strike에 저장할 정수형 배열 선언(depth 2 조건 제한에 의한다.)
-                compareNumber(inputs[i], outputs[i], info, i, j);
-                ball = info[0];
-                strike = info[1];
+            for(int j = 0; j < MAX_NUMBER; j++) {
+                if(compareNumber(inputs, outputs, info, i, j)) break;
             }
         }
-        if(ball > 0) System.out.print(ball + "볼 ");
-        if(strike > 0) System.out.println(strike + "스트라이크");
-        return strike;
+        return info[STRIKE];
     }
 
-    public void compareNumber(int input, int output, int[] info, int inputIndex, int outputIndex) {
-        if(input == output) {
-            if(inputIndex == outputIndex) info[0]++;
-            if(inputIndex != outputIndex) info[1]++;
+    public boolean compareNumber(int[] inputs, int[] outputs, int[] info, int inputIndex, int outputIndex) {
+        if(inputs[inputIndex] == outputs[outputIndex] && inputIndex == outputIndex) {
+            info[STRIKE]++;
+            return true;
         }
+        if(inputs[inputIndex] == outputs[outputIndex] && inputs[inputIndex] == outputs[inputIndex] && inputs[outputIndex] == outputs[outputIndex]) {
+            info[STRIKE]++; // 비교하는 숫자의 두 위치에 존재하는 숫자가 같을 때 비교하는 과정이다.
+            return true;
+        }
+        if(inputs[inputIndex] == outputs[outputIndex]) {
+            info[BALL]++;
+            return true;
+        }
+        return false;
     }
 
-    public void gamePlay() {
-        while(true) {
-            if(score != MAX_SCORE) {
-                int[] inputs = InputView.inputNumber();
-                int[] outputs = ResultView.outputNumber();
-                score = Math.max(checkScore(inputs, outputs),score);
-            }
-            if(score == MAX_SCORE) {
-                int flag = InputView.checkReset();
-                if(flag == 1) break;
-                if(flag != 2) System.out.println("숫자를 다시 입력해주세요.");
-            }
+    public void printInfo(int[] info) {
+        if(info[BALL] > 0) System.out.print(info[BALL] + "볼 ");
+        if(info[STRIKE] > 0) System.out.print(info[STRIKE] + "스트라이크");
+        if(info[BALL] <= 0 && info[STRIKE] <= 0) System.out.print("낫싱 : 세 숫자 모두 틀립니다.");;
+        System.out.println();
+    }
+
+    public void gameLoop() {
+        while(gameOperate());
+    }
+
+    public boolean gameOperate() {
+        int[] outputs = {INIT_NUMBER, INIT_NUMBER, INIT_NUMBER};
+        if(initalizer) {
+            outputs = ResultView.outputNumber();
+            initalizer = false;
         }
+        while(!gamePlay(outputs));
+        while(!InputView.checkReset());
+        return initalizer;
+    }
+
+    public boolean gamePlay(int[] outputs) {
+        if(score == MAX_SCORE) {
+            return true;
+        }
+        int[] inputs = InputView.inputNumber();
+        int[] info = {INIT_NUMBER, INIT_NUMBER};
+        score = Math.max(checkScore(inputs, outputs, info),score);
+        printInfo(info);
+        return false;
     }
 }
