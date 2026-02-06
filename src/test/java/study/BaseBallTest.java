@@ -61,7 +61,7 @@ public class BaseBallTest {
         int[] outputs = {1,3,5};
         int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
 
-        checkBall.checkScore(inputs, outputs, info); // when
+        checkBall.checkScoreInput(inputs, outputs, info); // when
 
         assertThat(info[BALL]).isEqualTo(3);
         assertThat(info[STRIKE]).isEqualTo(0); // then
@@ -74,7 +74,7 @@ public class BaseBallTest {
         int[] outputs = {1,3,5};
         int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
 
-        checkBall.checkScore(inputs, outputs, info); // when
+        checkBall.checkScoreInput(inputs, outputs, info); // when
 
         assertThat(info[BALL]).isEqualTo(0);
         assertThat(info[STRIKE]).isEqualTo(3); // then
@@ -87,7 +87,7 @@ public class BaseBallTest {
         int[] outputs = {7,9,7};
         int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
 
-        checkBall.checkScore(inputs, outputs, info); // when
+        checkBall.checkScoreInput(inputs, outputs, info); // when
 
         assertThat(info[BALL]).isEqualTo(0);
         assertThat(info[STRIKE]).isEqualTo(3); // then
@@ -100,7 +100,7 @@ public class BaseBallTest {
         int[] outputs = {5,3,1};
         int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
 
-        checkBall.checkScore(inputs, outputs, info); // when
+        checkBall.checkScoreInput(inputs, outputs, info); // when
 
         assertThat(info[BALL]).isEqualTo(2);
         assertThat(info[STRIKE]).isEqualTo(1); // then
@@ -113,7 +113,7 @@ public class BaseBallTest {
         int[] outputs = {2,4,6};
         int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
 
-        checkBall.checkScore(inputs, outputs, info); // when
+        checkBall.checkScoreInput(inputs, outputs, info); // when
 
         assertThat(info[BALL]).isEqualTo(0);
         assertThat(info[STRIKE]).isEqualTo(0); // then

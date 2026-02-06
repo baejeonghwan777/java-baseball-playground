@@ -9,13 +9,17 @@ public class CheckBall {
     final static int STRIKE = 1;
     static boolean initalizer = true;
 
-    public int checkScore(int[] inputs, int[] outputs, int[] info) {
+    public int checkScoreInput(int[] inputs, int[] outputs, int[] info) {
         for(int i = 0; i < MAX_NUMBER; i++) {
-            for(int j = 0; j < MAX_NUMBER; j++) {
-                if(compareNumber(inputs, outputs, info, i, j)) break;
-            }
+            checkScoreOutput(inputs, outputs, info, i);
         }
         return info[STRIKE];
+    }
+
+    public void checkScoreOutput(int[] inputs, int[] outputs, int[] info, int inputIndex) {
+        for(int j = 0; j < MAX_NUMBER; j++) {
+            if(compareNumber(inputs, outputs, info, inputIndex, j)) break;
+        }
     }
 
     public boolean compareNumber(int[] inputs, int[] outputs, int[] info, int inputIndex, int outputIndex) {
@@ -62,7 +66,7 @@ public class CheckBall {
         }
         int[] inputs = InputView.inputNumber();
         int[] info = {INIT_NUMBER, INIT_NUMBER};
-        score = Math.max(checkScore(inputs, outputs, info),score);
+        score = Math.max(checkScoreInput(inputs, outputs, info),score);
         printInfo(info);
         return false;
     }
