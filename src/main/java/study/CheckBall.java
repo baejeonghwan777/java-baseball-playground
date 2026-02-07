@@ -1,13 +1,13 @@
 package study;
 
 public class CheckBall {
-    static int score = 0;
+    int score = 0;
+    boolean initializer = true;
     final static int MAX_SCORE = 3;
     final static int MAX_NUMBER = 3;
     final static int INIT_NUMBER = 0;
     final static int BALL = 0;
     final static int STRIKE = 1;
-    static boolean initalizer = true;
 
     public int checkScoreInput(int[] inputs, int[] outputs, int[] info) {
         for(int i = 0; i < MAX_NUMBER; i++) {
@@ -27,10 +27,6 @@ public class CheckBall {
             info[STRIKE]++;
             return true;
         }
-        if(inputs[inputIndex] == outputs[outputIndex] && inputs[inputIndex] == outputs[inputIndex] && inputs[outputIndex] == outputs[outputIndex]) {
-            info[STRIKE]++; // 비교하는 숫자의 두 위치에 존재하는 숫자가 같을 때 비교하는 과정이다.
-            return true;
-        }
         if(inputs[inputIndex] == outputs[outputIndex]) {
             info[BALL]++;
             return true;
@@ -41,8 +37,20 @@ public class CheckBall {
     public void printInfo(int[] info) {
         if(info[BALL] > 0) System.out.print(info[BALL] + "볼 ");
         if(info[STRIKE] > 0) System.out.print(info[STRIKE] + "스트라이크");
-        if(info[BALL] <= 0 && info[STRIKE] <= 0) System.out.print("낫싱 : 세 숫자 모두 틀립니다.");;
+        if(info[BALL] <= 0 && info[STRIKE] <= 0) System.out.print("낫싱 : 세 숫자 모두 틀립니다.");
         System.out.println();
+    }
+
+    public boolean checkReset() {
+        int flag = InputView.checkFlag();
+        if(flag == 1) {
+            score = 0;
+            initializer = true;
+            return true;
+        }
+        if(flag == 2) return true;
+        System.out.println("숫자를 다시 입력하세요.");
+        return false;
     }
 
     public void gameLoop() {
@@ -51,13 +59,13 @@ public class CheckBall {
 
     public boolean gameOperate() {
         int[] outputs = {INIT_NUMBER, INIT_NUMBER, INIT_NUMBER};
-        if(initalizer) {
+        if(initializer) {
             outputs = ResultView.outputNumber();
-            initalizer = false;
+            initializer = false;
         }
         while(!gamePlay(outputs));
-        while(!InputView.checkReset());
-        return initalizer;
+        while(!checkReset());
+        return initializer;
     }
 
     public boolean gamePlay(int[] outputs) {
@@ -66,7 +74,7 @@ public class CheckBall {
         }
         int[] inputs = InputView.inputNumber();
         int[] info = {INIT_NUMBER, INIT_NUMBER};
-        score = Math.max(checkScoreInput(inputs, outputs, info),score);
+        score = Math.max(checkScoreInput(inputs, outputs, info), score);
         printInfo(info);
         return false;
     }

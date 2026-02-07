@@ -2,9 +2,10 @@ package study;
 
 import java.util.Scanner;
 
-import static study.CheckBall.*;
-
 public class InputView {
+    final static int MAX_SCORE = 3;
+    final static int MAX_NUMBER = 3;
+    final static int INIT_NUMBER = 0;
     static Scanner scanner = new Scanner(System.in);
 
     public static int[] inputNumber() {
@@ -18,7 +19,7 @@ public class InputView {
     }
 
     public static boolean validNumber(String input) {
-        if(input.length() != MAX_NUMBER) {
+        if(input.length() != MAX_NUMBER || input.contains("0")) {
             return false; // 숫자의 길이가 다른 경우에 다시 입력을 요구하기 위한 예외 처리이다.
         }
         try {
@@ -38,18 +39,11 @@ public class InputView {
         return intInputs;
     }
 
-    public static boolean checkReset() {
+    public static int checkFlag() {
         System.out.println(MAX_SCORE + "개의 숫자를 모두 맞히셨습니다! 게임 종료");
         System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
         int flag = scanner.nextInt();
         scanner.nextLine();
-        if(flag == 1) {
-            score = 0;
-            initalizer = true;
-            return true;
-        }
-        if(flag == 2) return true;
-        System.out.println("숫자를 다시 입력하세요.");
-        return false;
+        return flag;
     }
 }
