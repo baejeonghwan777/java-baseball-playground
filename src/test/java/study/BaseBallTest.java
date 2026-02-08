@@ -10,13 +10,28 @@ import static study.InputView.validNumber;
 
 public class BaseBallTest {
     CheckBall checkBall;
-    final int INIT_NUMBER = 0;
+    Ball ball;
     final int BALL = 0;
     final int STRIKE = 1;
 
     @BeforeEach
     void setUp() {
-        checkBall = new CheckBall();
+        ball = new Ball(new int[]{0, 0}, true, 0);
+        checkBall = new CheckBall(ball);
+    }
+
+    @DisplayName("객체를 생성하고 객체에 변수가 제대로 대입되었는지 판단한다.")
+    @Test
+    public void objectGenerateValid() {
+        Ball balltest; // give
+        balltest = new Ball(new int[]{1, 2}, true, 2); // when
+
+        assertAll(
+                () -> assertThat(balltest.info[BALL]).isEqualTo(1),
+                () -> assertThat(balltest.info[STRIKE]).isEqualTo(2),
+                () -> assertThat(balltest.initializer).isEqualTo(true),
+                () -> assertThat(balltest.score).isEqualTo(2) // then
+        );
     }
 
     @DisplayName("사용자가 3글자의 정상적인 숫자를 입력했을 때 정상 여부를 판별한다.")
@@ -39,6 +54,14 @@ public class BaseBallTest {
     @Test
     public void inputTestInValidZero() {
         String input = "010"; // give
+        boolean result = validNumber(input); // when
+        assertThat(result).isEqualTo(false); // then
+    }
+
+    @DisplayName("사용자가 똑같은 숫자를 2개 이상 입력했을 때 정상 여부를 판별한다.")
+    @Test
+    public void inputTestInValidDuplicate() {
+        String input = "313"; // give
         boolean result = validNumber(input); // when
         assertThat(result).isEqualTo(false); // then
     }
@@ -71,14 +94,13 @@ public class BaseBallTest {
     @Test
     public void ballTest() {
         int[] inputs = {3,5,1};
-        int[] outputs = {1,3,5};
-        int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
+        int[] outputs = {1,3,5}; // give
 
-        checkBall.checkScoreInput(inputs, outputs, info); // when
+        checkBall.checkScoreInput(inputs, outputs); // when
 
         assertAll(
-                () -> assertThat(info[BALL]).isEqualTo(3),
-                () -> assertThat(info[STRIKE]).isEqualTo(0) // then
+                () -> assertThat(ball.info[BALL]).isEqualTo(3),
+                () -> assertThat(ball.info[STRIKE]).isEqualTo(0) // then
         );
     }
 
@@ -86,14 +108,13 @@ public class BaseBallTest {
     @Test
     public void strikeTest() {
         int[] inputs = {1,3,5};
-        int[] outputs = {1,3,5};
-        int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
+        int[] outputs = {1,3,5}; // give
 
-        checkBall.checkScoreInput(inputs, outputs, info); // when
+        checkBall.checkScoreInput(inputs, outputs); // when
 
         assertAll(
-                () -> assertThat(info[BALL]).isEqualTo(0),
-                () -> assertThat(info[STRIKE]).isEqualTo(3) // then
+                () -> assertThat(ball.info[BALL]).isEqualTo(0),
+                () -> assertThat(ball.info[STRIKE]).isEqualTo(3) // then
         );
     }
 
@@ -101,14 +122,13 @@ public class BaseBallTest {
     @Test
     public void ballStrikeTest() {
         int[] inputs = {1,3,5};
-        int[] outputs = {5,3,1};
-        int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
+        int[] outputs = {5,3,1}; // give
 
-        checkBall.checkScoreInput(inputs, outputs, info); // when
+        checkBall.checkScoreInput(inputs, outputs); // when
 
         assertAll(
-                () -> assertThat(info[BALL]).isEqualTo(2),
-                () -> assertThat(info[STRIKE]).isEqualTo(1) // then
+                () -> assertThat(ball.info[BALL]).isEqualTo(2),
+                () -> assertThat(ball.info[STRIKE]).isEqualTo(1) // then
         );
     }
 
@@ -116,14 +136,13 @@ public class BaseBallTest {
     @Test
     public void nothingTest() {
         int[] inputs = {1,3,5};
-        int[] outputs = {2,4,6};
-        int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
+        int[] outputs = {2,4,6}; // give
 
-        checkBall.checkScoreInput(inputs, outputs, info); // when
+        checkBall.checkScoreInput(inputs, outputs); // when
 
         assertAll(
-                () -> assertThat(info[BALL]).isEqualTo(0),
-                () -> assertThat(info[STRIKE]).isEqualTo(0) // then
+                () -> assertThat(ball.info[BALL]).isEqualTo(0),
+                () -> assertThat(ball.info[STRIKE]).isEqualTo(0) // then
         );
     }
 

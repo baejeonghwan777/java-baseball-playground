@@ -23,11 +23,24 @@ public class InputView {
             return false; // 숫자의 길이가 다른 경우에 다시 입력을 요구하기 위한 예외 처리이다.
         }
         try {
-            Integer.parseInt(input); // 문자가 아닌 경우에 다시 입력을 요구하기 위한 예외 처리이다.
-            return true;
+            return checkNumber(parseNumbers(input)); // 문자가 아닌 경우에 다시 입력을 요구하기 위한 예외 처리이다.
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public static boolean checkNumber(int[] intInputs) {
+        for(int i = 1; i < MAX_NUMBER; i++) {
+            if(!duplicationCheck(intInputs, i)) return false;
+        }
+        return true;
+    }
+
+    public static boolean duplicationCheck(int[] output, int index) {
+        for(int j = 0; j < index; j++) {
+            if(output[j] == output[index]) return false;
+        }
+        return true;
     }
 
     public static int[] parseNumbers(String input) {

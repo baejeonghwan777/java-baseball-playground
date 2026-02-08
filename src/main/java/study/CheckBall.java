@@ -1,34 +1,38 @@
 package study;
 
 public class CheckBall {
-    int score = 0;
-    boolean initializer = true;
+    Ball ball;
     final static int MAX_SCORE = 3;
     final static int MAX_NUMBER = 3;
     final static int INIT_NUMBER = 0;
     final static int BALL = 0;
     final static int STRIKE = 1;
 
-    public int checkScoreInput(int[] inputs, int[] outputs, int[] info) {
+    public CheckBall(Ball ball) {
+        this.ball = ball;
+    }
+
+    public int checkScoreInput(int[] inputs, int[] outputs) {
+        ball.info = new int[]{INIT_NUMBER, INIT_NUMBER};
         for(int i = 0; i < MAX_NUMBER; i++) {
-            checkScoreOutput(inputs, outputs, info, i);
+            checkScoreOutput(inputs, outputs, i);
         }
-        return info[STRIKE];
+        return ball.info[STRIKE];
     }
 
-    public void checkScoreOutput(int[] inputs, int[] outputs, int[] info, int inputIndex) {
+    public void checkScoreOutput(int[] inputs, int[] outputs, int inputIndex) {
         for(int j = 0; j < MAX_NUMBER; j++) {
-            if(compareNumber(inputs, outputs, info, inputIndex, j)) break;
+            if(compareNumber(inputs, outputs, inputIndex, j)) break;
         }
     }
 
-    public boolean compareNumber(int[] inputs, int[] outputs, int[] info, int inputIndex, int outputIndex) {
+    public boolean compareNumber(int[] inputs, int[] outputs, int inputIndex, int outputIndex) {
         if(inputs[inputIndex] == outputs[outputIndex] && inputIndex == outputIndex) {
-            info[STRIKE]++;
+            ball.info[STRIKE]++;
             return true;
         }
         if(inputs[inputIndex] == outputs[outputIndex]) {
-            info[BALL]++;
+            ball.info[BALL]++;
             return true;
         }
         return false;
@@ -44,8 +48,7 @@ public class CheckBall {
     public boolean checkReset() {
         int flag = InputView.checkFlag();
         if(flag == 1) {
-            score = 0;
-            initializer = true;
+            ball = new Ball(new int[]{0, 0}, true, 0);
             return true;
         }
         if(flag == 2) return true;
@@ -59,23 +62,22 @@ public class CheckBall {
 
     public boolean gameOperate() {
         int[] outputs = {INIT_NUMBER, INIT_NUMBER, INIT_NUMBER};
-        if(initializer) {
+        if(ball.initializer) {
             outputs = ResultView.outputNumber();
-            initializer = false;
+            ball.initializer = false;
         }
         while(!gamePlay(outputs));
         while(!checkReset());
-        return initializer;
+        return ball.initializer;
     }
 
     public boolean gamePlay(int[] outputs) {
-        if(score == MAX_SCORE) {
+        if(ball.score == MAX_SCORE) {
             return true;
         }
         int[] inputs = InputView.inputNumber();
-        int[] info = {INIT_NUMBER, INIT_NUMBER};
-        score = Math.max(checkScoreInput(inputs, outputs, info), score);
-        printInfo(info);
+        ball.score = Math.max(checkScoreInput(inputs, outputs), ball.score);
+        printInfo(ball.info);
         return false;
     }
 }
