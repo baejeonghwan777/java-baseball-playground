@@ -4,33 +4,68 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static study.InputView.INIT_NUMBER;
 import static study.InputView.validNumber;
 
 public class BaseBallTest {
-    CheckBall checkBall;
-    Ball ball;
     final int BALL = 0;
     final int STRIKE = 1;
+    CheckBall checkBall;
+    Balls balls;
 
     @BeforeEach
     void setUp() {
-        ball = new Ball(new int[]{0, 0}, true, 0);
-        checkBall = new CheckBall(ball);
+        List<Ball> ballList = new ArrayList<>();
+        balls = new Balls(ballList, 3);
+        checkBall = new CheckBall(balls);
     }
 
-    @DisplayName("객체를 생성하고 객체에 변수가 제대로 대입되었는지 판단한다.")
+    @DisplayName("객체를 생성하고 객체에 초기화된 변수 ball이 제대로 대입되었는지 판단한다.")
     @Test
-    public void objectGenerateValid() {
-        Ball balltest; // give
-        balltest = new Ball(new int[]{1, 2}, true, 2); // when
+    public void objectGenerateBall() {
+        int input = 0; // give
+        int result = balls.lookUpBall(1); // when
+        assertThat(result).isEqualTo(input); // then
+    }
 
+    @DisplayName("객체를 생성하고 객체에 초기화된 변수 strike가 제대로 대입되었는지 판단한다.")
+    @Test
+    public void objectGenerateStrike() {
+        int input = 0; // give
+        int result = balls.lookUpStrike(1); // when
+        assertThat(result).isEqualTo(input); // then
+    }
+
+    @DisplayName("객체 변수 ball이 정상적으로 증가되었는지 판단한다.")
+    @Test
+    public void objectIncreaseBall() {
+        int input = 1; // give
+        balls.activateBalls(1); // when
+        assertThat(balls.lookUpBall(1)).isEqualTo(input); // then
+    }
+
+    @DisplayName("객체 변수 strike가 정상적으로 증가되었는지 판단한다.")
+    @Test
+    public void objectIncreaseStrike() {
+        int input = 1; // give
+        balls.activateStrikes(1); // when
+        assertThat(balls.lookUpStrike(1)).isEqualTo(input); // then
+    }
+
+    @DisplayName("객체 변수 strike가 정상적으로 증가되었는지 판단한다.")
+    @Test
+    public void objectInitValid() {
+        int ball = 0;
+        int strike = 0; // give
+        balls.initializeBalls(3); // when
         assertAll(
-                () -> assertThat(balltest.info[BALL]).isEqualTo(1),
-                () -> assertThat(balltest.info[STRIKE]).isEqualTo(2),
-                () -> assertThat(balltest.initializer).isEqualTo(true),
-                () -> assertThat(balltest.score).isEqualTo(2) // then
+                () -> assertThat(ball).isEqualTo(balls.lookUpBall(1)),
+                () -> assertThat(strike).isEqualTo(balls.lookUpBall(1)) // then
         );
     }
 
@@ -86,63 +121,67 @@ public class BaseBallTest {
     @Test
     public void parseTest() {
         String input = "123";
-        int[] output = {1,2,3}; // give
+        int[] output = {1, 2, 3}; // give
         assertThat(InputView.parseNumbers(input)).isEqualTo(output); // when, then
     }
 
     @DisplayName("컴퓨터가 제시한 숫자와 사용자가 제시한 숫자를 비교한다. 숫자가 맞았지만 위치가 다른 경우에 대해 출력한다.")
     @Test
     public void ballTest() {
-        int[] inputs = {3,5,1};
-        int[] outputs = {1,3,5}; // give
+        int[] inputs = {3, 5, 1};
+        int[] outputs = {1, 3, 5};
+        int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
 
-        checkBall.checkScoreInput(inputs, outputs); // when
+        checkBall.checkScoreInput(inputs, outputs, info); // when
 
         assertAll(
-                () -> assertThat(ball.info[BALL]).isEqualTo(3),
-                () -> assertThat(ball.info[STRIKE]).isEqualTo(0) // then
+                () -> assertThat(info[BALL]).isEqualTo(3),
+                () -> assertThat(info[STRIKE]).isEqualTo(0) // then
         );
     }
 
     @DisplayName("컴퓨터가 제시한 숫자와 사용자가 제시한 숫자를 비교한다. 숫자가 맞았고 위치도 같은 경우에 대해 출력한다.")
     @Test
     public void strikeTest() {
-        int[] inputs = {1,3,5};
-        int[] outputs = {1,3,5}; // give
+        int[] inputs = {1, 3, 5};
+        int[] outputs = {1, 3, 5};
+        int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
 
-        checkBall.checkScoreInput(inputs, outputs); // when
+        checkBall.checkScoreInput(inputs, outputs, info); // when
 
         assertAll(
-                () -> assertThat(ball.info[BALL]).isEqualTo(0),
-                () -> assertThat(ball.info[STRIKE]).isEqualTo(3) // then
+                () -> assertThat(info[BALL]).isEqualTo(0),
+                () -> assertThat(info[STRIKE]).isEqualTo(3) // then
         );
     }
 
     @DisplayName("컴퓨터가 제시한 숫자와 사용자가 제시한 숫자를 비교한다. 숫자와 위치가 모두 같거나 위치만 다른 경우가 복합적인 경우에 대해 출력한다.")
     @Test
     public void ballStrikeTest() {
-        int[] inputs = {1,3,5};
-        int[] outputs = {5,3,1}; // give
+        int[] inputs = {1, 3, 5};
+        int[] outputs = {5, 3, 1};
+        int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
 
-        checkBall.checkScoreInput(inputs, outputs); // when
+        checkBall.checkScoreInput(inputs, outputs, info); // when
 
         assertAll(
-                () -> assertThat(ball.info[BALL]).isEqualTo(2),
-                () -> assertThat(ball.info[STRIKE]).isEqualTo(1) // then
+                () -> assertThat(info[BALL]).isEqualTo(2),
+                () -> assertThat(info[STRIKE]).isEqualTo(1) // then
         );
     }
 
     @DisplayName("컴퓨터가 제시한 숫자와 사용자가 제시한 숫자를 비교한다. 맞는 숫자가 단 하나도 없는 경우에 대해 출력한다.")
     @Test
     public void nothingTest() {
-        int[] inputs = {1,3,5};
-        int[] outputs = {2,4,6}; // give
+        int[] inputs = {1, 3, 5};
+        int[] outputs = {2, 4, 6};
+        int[] info = {INIT_NUMBER, INIT_NUMBER}; // give
 
-        checkBall.checkScoreInput(inputs, outputs); // when
+        checkBall.checkScoreInput(inputs, outputs, info); // when
 
         assertAll(
-                () -> assertThat(ball.info[BALL]).isEqualTo(0),
-                () -> assertThat(ball.info[STRIKE]).isEqualTo(0) // then
+                () -> assertThat(info[BALL]).isEqualTo(0),
+                () -> assertThat(info[STRIKE]).isEqualTo(0) // then
         );
     }
 

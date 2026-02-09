@@ -1,83 +1,89 @@
 package study;
 
 public class CheckBall {
-    Ball ball;
     final static int MAX_SCORE = 3;
     final static int MAX_NUMBER = 3;
     final static int INIT_NUMBER = 0;
     final static int BALL = 0;
     final static int STRIKE = 1;
+    Balls balls;
+    int score = 0;
+    boolean initializer = true;
 
-    public CheckBall(Ball ball) {
-        this.ball = ball;
+    public CheckBall(Balls balls) {
+        this.balls = balls;
     }
 
-    public int checkScoreInput(int[] inputs, int[] outputs) {
-        ball.info = new int[]{INIT_NUMBER, INIT_NUMBER};
-        for(int i = 0; i < MAX_NUMBER; i++) {
+    public int checkScoreInput(int[] inputs, int[] outputs, int[] info) {
+        for (int i = 0; i < MAX_NUMBER; i++) {
             checkScoreOutput(inputs, outputs, i);
+            info[BALL] += balls.lookUpBall(i);
+            info[STRIKE] += balls.lookUpStrike(i);
         }
-        return ball.info[STRIKE];
+        return info[STRIKE];
     }
 
     public void checkScoreOutput(int[] inputs, int[] outputs, int inputIndex) {
-        for(int j = 0; j < MAX_NUMBER; j++) {
-            if(compareNumber(inputs, outputs, inputIndex, j)) break;
+        for (int j = 0; j < MAX_NUMBER; j++) {
+            if (compareNumber(inputs, outputs, inputIndex, j)) break;
         }
     }
 
     public boolean compareNumber(int[] inputs, int[] outputs, int inputIndex, int outputIndex) {
-        if(inputs[inputIndex] == outputs[outputIndex] && inputIndex == outputIndex) {
-            ball.info[STRIKE]++;
+        if (inputs[inputIndex] == outputs[outputIndex] && inputIndex == outputIndex) {
+            balls.activateStrikes(inputIndex);
             return true;
         }
-        if(inputs[inputIndex] == outputs[outputIndex]) {
-            ball.info[BALL]++;
+        if (inputs[inputIndex] == outputs[outputIndex]) {
+            balls.activateBalls(inputIndex);
             return true;
         }
         return false;
     }
 
     public void printInfo(int[] info) {
-        if(info[BALL] > 0) System.out.print(info[BALL] + "볼 ");
-        if(info[STRIKE] > 0) System.out.print(info[STRIKE] + "스트라이크");
-        if(info[BALL] <= 0 && info[STRIKE] <= 0) System.out.print("낫싱 : 세 숫자 모두 틀립니다.");
+        if (info[BALL] > 0) System.out.print(info[BALL] + "볼 ");
+        if (info[STRIKE] > 0) System.out.print(info[STRIKE] + "스트라이크");
+        if (info[BALL] <= 0 && info[STRIKE] <= 0) System.out.print("낫싱 : 세 숫자 모두 틀립니다.");
         System.out.println();
     }
 
     public boolean checkReset() {
         int flag = InputView.checkFlag();
-        if(flag == 1) {
-            ball = new Ball(new int[]{0, 0}, true, 0);
+        if (flag == 1) {
+            score = 0;
+            initializer = true;
             return true;
         }
-        if(flag == 2) return true;
+        if (flag == 2) return true;
         System.out.println("숫자를 다시 입력하세요.");
         return false;
     }
 
     public void gameLoop() {
-        while(gameOperate());
+        while (gameOperate()) ;
     }
 
     public boolean gameOperate() {
         int[] outputs = {INIT_NUMBER, INIT_NUMBER, INIT_NUMBER};
-        if(ball.initializer) {
+        if (initializer) {
             outputs = ResultView.outputNumber();
-            ball.initializer = false;
+            initializer = false;
         }
-        while(!gamePlay(outputs));
-        while(!checkReset());
-        return ball.initializer;
+        while (!gamePlay(outputs)) ;
+        while (!checkReset()) ;
+        return initializer;
     }
 
     public boolean gamePlay(int[] outputs) {
-        if(ball.score == MAX_SCORE) {
+        if (score == MAX_SCORE) {
             return true;
         }
+        balls.initializeBalls(MAX_NUMBER);
         int[] inputs = InputView.inputNumber();
-        ball.score = Math.max(checkScoreInput(inputs, outputs), ball.score);
-        printInfo(ball.info);
+        int[] info = {INIT_NUMBER, INIT_NUMBER};
+        score = Math.max(checkScoreInput(inputs, outputs, info), score);
+        printInfo(info);
         return false;
     }
 }

@@ -9,7 +9,7 @@ public class InputView {
     static Scanner scanner = new Scanner(System.in);
 
     public static int[] inputNumber() {
-        System.out.print("숫자를 입력해 주세요 : ");
+        System.out.print("숫자를 입력해 주세요. : ");
         String input = scanner.nextLine();
         while (!validNumber(input)) {
             System.out.print("숫자를 다시 입력해 주세요. : ");
