@@ -12,11 +12,11 @@ public class Ball {
     }
 
     public void activateBall() {
-        if (ball >= 0 && ball <= 1) this.ball++;
+        if (ball == 0) this.ball++;
     }
 
     public void activateStrike() {
-        if (strike >= 0 && strike <= 1) this.strike++;
+        if (strike == 0) this.strike++;
     }
 
     public int getBall() {

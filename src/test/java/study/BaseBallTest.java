@@ -49,6 +49,15 @@ public class BaseBallTest {
         assertThat(balls.lookUpBall(1)).isEqualTo(input); // then
     }
 
+    @DisplayName("객체 변수 ball이 1 이상 증가하지 않는지 확인한다.")
+    @Test
+    public void objectIncreaseBallInvalid() {
+        int input = 1; // give
+        balls.activateBalls(1);
+        balls.activateBalls(1); // when
+        assertThat(balls.lookUpBall(1)).isEqualTo(input); // then
+    }
+
     @DisplayName("객체 변수 strike가 정상적으로 증가되었는지 판단한다.")
     @Test
     public void objectIncreaseStrike() {
@@ -57,7 +66,16 @@ public class BaseBallTest {
         assertThat(balls.lookUpStrike(1)).isEqualTo(input); // then
     }
 
-    @DisplayName("객체 변수 strike가 정상적으로 증가되었는지 판단한다.")
+    @DisplayName("객체 변수 ball이 1 이상 증가하지 않는지 확인한다.")
+    @Test
+    public void objectIncreaseStrikeInvalid() {
+        int input = 1; // give
+        balls.activateStrikes(1);
+        balls.activateStrikes(1); // when
+        assertThat(balls.lookUpStrike(1)).isEqualTo(input); // then
+    }
+
+    @DisplayName("변수가 초기화가 제대로 이루어졌는지 확인한다.")
     @Test
     public void objectInitValid() {
         int ball = 0;
