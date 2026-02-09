@@ -66,7 +66,7 @@ public class BaseBallTest {
         assertThat(balls.lookUpStrike(1)).isEqualTo(input); // then
     }
 
-    @DisplayName("객체 변수 ball이 1 이상 증가하지 않는지 확인한다.")
+    @DisplayName("객체 변수 strike가 1 이상 증가하지 않는지 확인한다.")
     @Test
     public void objectIncreaseStrikeInvalid() {
         int input = 1; // give
